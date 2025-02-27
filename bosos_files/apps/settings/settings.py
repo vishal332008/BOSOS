@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import override
 
+import math
 import babase
 import bauiv1 as bui
 import bascenev1 as bs
@@ -98,6 +99,19 @@ class SettingsScreen(bui.MainWindow):
             background=False,
             selection_loops_to_parent=True,
         )
+
+        # img = bui.imagewidget(
+        #     #parent=self._root_widget,
+        #     size=bui.get_virtual_screen_size(),
+        #     texture=bui.gettexture('flagColor')
+        # )
+        
+        # def abc():
+        #     bui.imagewidget(
+        #         edit=img,
+        #         size=bui.get_virtual_screen_size())
+
+        # self.blah = bui.AppTimer(1, abc, repeat=True)
 
         self._rebuild()
 

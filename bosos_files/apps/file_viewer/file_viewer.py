@@ -242,6 +242,11 @@ class TexturesWindow(bui.MainWindow):
                     button_type='square',
                     label='',
                     texture=texture,
+                    mesh_opaque = bui.getmesh('level_select_button_opaque'),
+                    mesh_transparent = bui.getmesh('level_select_button_transparent'),
+                    mask_texture = bui.gettexture('frameInset'),
+
+                    # mask_texture=bui.gettexture('frameInset') #('mapPreviewMask'),
                 )
                 bui.buttonwidget(
                     edit=btn,
