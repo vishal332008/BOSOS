@@ -122,7 +122,7 @@ class HomeScreen(bui.MainWindow):
         self._subcontainer = bui.containerwidget(
             parent=self._scrollwidget,
             size=(self._sub_width, self._sub_height),
-            #background=False,
+            background=False,
             selection_loops_to_parent=True,
         )
 
