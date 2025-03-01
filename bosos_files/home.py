@@ -17,7 +17,7 @@ APPS_PATH = PYTHON_PATH + os.sep + 'bosos_files' + os.sep + 'apps'
 
 @dataclass
 class App:
-    
+
     name: str
     texture: str
     filename: str
@@ -62,14 +62,14 @@ class HomeScreen(bui.MainWindow):
             origin_widget=origin_widget,
         )
 
-        bui.imagewidget(
-            parent=self._root_widget,
-            size=(self._width, self._height + top_extra),
-            position=(-self._width/2, -(self._height + top_extra)/2),
-            opacity=0.4,
-            texture=bui.gettexture('null'),
-            mask_texture=bui.gettexture('characterIconMask')
-        )
+        # bui.imagewidget(
+        #     parent=self._root_widget,
+        #     size=(self._width, self._height + top_extra),
+        #     position=(-self._width/2, -(self._height + top_extra)/2),
+        #     opacity=0.4,
+        #     texture=bui.gettexture('null'),
+        #     mask_texture=bui.gettexture('characterIconMask')
+        # )
 
         self._scroll_width = self._width - (100 + 2 * x_inset)
         self._scroll_height = self._height - (
@@ -77,7 +77,6 @@ class HomeScreen(bui.MainWindow):
         )
         self._sub_width = self._scroll_width * 0.95
         self._sub_height = 0.0
-        
 
         self._r = 'HomeScreen'
 
@@ -116,7 +115,8 @@ class HomeScreen(bui.MainWindow):
             highlight=False,
             size=(self._scroll_width, self._scroll_height),
             selection_loops_to_parent=True,
-            border_opacity=0.1,
+            #border_opacity=0.3,
+            color=(1,1,1),
         )
         bui.widget(edit=self._scrollwidget, right_widget=self._scrollwidget)
         self._subcontainer = bui.containerwidget(
@@ -145,7 +145,7 @@ class HomeScreen(bui.MainWindow):
         pass
 
     def _load_apps(self) -> None:
-    
+
         folderlist = os.listdir(APPS_PATH)
         for app in folderlist:
             names = get_app_and_class_name(
@@ -170,7 +170,7 @@ class HomeScreen(bui.MainWindow):
         app = bui.app
         assert app.classic is not None
         uiscale = app.ui_v1.uiscale
-        
+
         _apps_per_row = 5 # number of apps in a single row.
         # transforming the list in tabular form(so we don't to care about row/comn and list index)
         _sliced_apps_list = [
@@ -181,17 +181,16 @@ class HomeScreen(bui.MainWindow):
         # The app btn width and height(according to subcontainer width and x padding)
         _btns_remain_width_total = self._sub_width - _btn_xpad * (_apps_per_row+1)
         _btn_size = _btns_remain_width_total/_apps_per_row
-        
+
         rows = len(_sliced_apps_list) 
         self._sub_height = rows * _btn_size + rows * _btn_ypad + 80
         bui.containerwidget(edit=self._subcontainer, size=(self._sub_width, self._sub_height))
-        
+
         x_pos = _btn_xpad
         y_pos = self._sub_height - _btn_ypad - _btn_size
-        
+
         for app_row in _sliced_apps_list:
             for appy in app_row:
-                
                 app_name = f"bosos_files.apps.{appy.filename}.{appy.filename}.{appy.classname}"
                 btn = bui.buttonwidget(
                     parent=self._subcontainer,
@@ -200,7 +199,7 @@ class HomeScreen(bui.MainWindow):
                     color=(1.0, 1.0, 1.0),
                     button_type='square',
                     label='',
-                    texture=bui.gettexture("white"),
+                    texture=bui.gettexture(f'apps{os.sep}{appy.filename}{os.sep}logo'),
                 )
                 bui.buttonwidget(
                     edit=btn,
@@ -224,7 +223,7 @@ class HomeScreen(bui.MainWindow):
                     h_align="center",
                 )
                 x_pos += _btn_size + _btn_xpad
-            
+
             x_pos = _btn_xpad # reset when enter new row.
             y_pos -= _btn_size + _btn_ypad
 
