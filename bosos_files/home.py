@@ -11,6 +11,7 @@ import babase
 import bauiv1 as bui
 
 from .utils import get_app_and_class_name
+from .app_window import AppWindow
 
 PYTHON_PATH = babase.app.env.python_directory_user
 APPS_PATH = PYTHON_PATH + os.sep + 'bosos_files' + os.sep + 'apps'
@@ -206,7 +207,7 @@ class HomeScreen(bui.MainWindow):
                     on_activate_call=(
                         functools.partial(
                             self._open_app,
-                            window=babase.getclass(app_name, bui.MainWindow),
+                            window=babase.getclass(app_name, AppWindow),
                             button=btn
                         )
                     )
@@ -227,10 +228,7 @@ class HomeScreen(bui.MainWindow):
             x_pos = _btn_xpad # reset when enter new row.
             y_pos -= _btn_size + _btn_ypad
 
-    def _open_app(self, window: bui.MainWindow, button: bui.buttonwidget) -> None:
-        if not self.main_window_has_control():
-            print("This Window does not have Main Window Control.")
-            return
-        self.main_window_replace(
-            window(origin_widget=button),
-        )
+    def _open_app(self, window: AppWindow, button: bui.buttonwidget) -> None:
+        self.main_window_close("instant")
+        bui.app.mode.home_screen = None
+        window()
