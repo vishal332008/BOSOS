@@ -23,6 +23,12 @@ if TYPE_CHECKING:
 
 # ba_meta export babase.AppMode
 class Activate(babase.AppMode):
+    
+    def __init__(self) -> None:
+        
+        self.home_screen_type = HomeScreen
+        self.home_screen: HomeScreen | None = None
+        
     @override
     @classmethod
     def get_app_experience(cls) -> AppExperience:
@@ -106,7 +112,7 @@ class Activate(babase.AppMode):
             self.update_time_timer = babase.AppTimer(60, update_time, repeat=True)
 
         babase.apptimer(60 - time.second, set_timer)
-
+        self.home_screen = HomeScreen(transition=None)
         # Main Window / Desktop
         babase.app.ui_v1.set_main_window(
             HomeScreen(transition=None),
