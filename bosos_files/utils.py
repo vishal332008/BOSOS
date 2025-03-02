@@ -53,5 +53,5 @@ def get_app_and_class_name(path, filename) -> list[str] | None:
                     return None
             if pattern2.match(line):
                 class_line = True
-                app_and_class[0] = pattern2.match(line).group(1)
+                app_and_class[0] = pattern2.match(line).group(1).replace('_', ' ')
         return None
