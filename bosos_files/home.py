@@ -9,8 +9,8 @@ import functools
 import babase
 import bauiv1 as bui
 
-from .utils import get_app_and_class_name
-from .app_window import AppWindow
+from bosos_files.utils import get_app_and_class_name
+from bosos_files.app_window import AppWindow
 
 PYTHON_PATH = babase.app.env.python_directory_user
 APPS_PATH = PYTHON_PATH + os.sep + 'bosos_files' + os.sep + 'apps'
@@ -28,7 +28,7 @@ class HomeScreen:
 
     def __init__(
         self,
-        transition: str | None = None,
+        transition: str = 'in_scale',
         root_widget = None,
     ):
         # pylint: disable=too-many-statements
@@ -53,10 +53,11 @@ class HomeScreen:
 
         self._r = 'HomeScreen'
 
-        self._root_widget = self.containerwidget(
+        self._root_widget = bui.containerwidget(
             parent=root_widget,
             size=(0, 0),
             toolbar_visibility='no_menu_minimal',
+            transition=transition,
         )
 
         self._scrollwidget = bui.scrollwidget(
@@ -164,5 +165,6 @@ class HomeScreen:
             y_pos -= _btn_size + _btn_ypad
 
     def _open_app(self, window: AppWindow, button: bui.buttonwidget) -> None:
+        bui.containerwidget(edit=self._root_widget, transition='out_scale')
         bui.app.mode.home_screen = None
         window(origin_widget=button)
