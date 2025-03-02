@@ -11,7 +11,7 @@ import bascenev1 as bs
 
 from bosos_files.app_window import AppWindow
 
-# export app Settings_Window_Testing
+# export app Settings
 class SettingsScreen(AppWindow):
 
     def __init__(
