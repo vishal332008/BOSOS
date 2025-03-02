@@ -28,6 +28,7 @@ class Activate(babase.AppMode):
 
         self.home_screen_type = HomeScreen
         self.home_screen: HomeScreen | None = None
+        self.parent: bui.containerwidget | None = None
 
     @override
     @classmethod
@@ -66,12 +67,15 @@ class Activate(babase.AppMode):
         _baclassic.classic_app_mode_activate()
         setup_textures()
 
-        parent = bui.containerwidget(size=(0, 0), toolbar_visibility='no_menu_minimal')
+        self.parent = bui.containerwidget(
+            size=(0, 0),
+            toolbar_visibility='no_menu_minimal'
+        )
         size=bui.get_virtual_screen_size()
         time = datetime.datetime.now()
 
         self.wallpaper = bui.imagewidget(
-            parent=parent,
+            parent=self.parent,
             size=(size[0], size[1] - 40),
             position=(-size[0]/2, -size[1]/2 + 40),
             texture=bui.gettexture('alwaysLandBGColor') 
@@ -79,7 +83,7 @@ class Activate(babase.AppMode):
         # 'flagColor', 'eggTex3', 'alwaysLandBGColor', 'menuBG'
 
         self.taskbar = bui.imagewidget(
-            parent=parent,
+            parent=self.parent,
             size=(size[0], 40),
             position=(-size[0]/2, -size[1]/2),
             texture=bui.gettexture('flagColor'),
@@ -87,7 +91,7 @@ class Activate(babase.AppMode):
         )
 
         self.time = bui.buttonwidget(
-            parent=parent,
+            parent=self.parent,
             size=(100, 40),
             label=time.strftime("%H:%M\n%d/%m - %A"),
             position=(size[0]/2 - 100, -size[1]/2),
@@ -111,7 +115,7 @@ class Activate(babase.AppMode):
 
         babase.apptimer(60 - time.second, set_timer)
 
-        self.home_screen = HomeScreen(root_widget=parent)
+        self.home_screen = HomeScreen(root_widget=self.parent)
 
     def update_desktop(self):
         try:
