@@ -1,8 +1,7 @@
 # ba_meta require api 9
 
 from __future__ import annotations
-from typing import override 
-from dataclasses import dataclass 
+from dataclasses import dataclass
 
 import os
 import functools
@@ -25,12 +24,12 @@ class App:
     classname: str
     path: str
 
-class HomeScreen(bui.MainWindow):
+class HomeScreen:
 
     def __init__(
         self,
         transition: str | None = None,
-        origin_widget: bui.Widget | None = None,
+        root_widget = None,
     ):
         # pylint: disable=too-many-statements
         app = bui.app
@@ -44,33 +43,6 @@ class HomeScreen(bui.MainWindow):
             if uiscale is bui.UIScale.SMALL
             else 450.0 if uiscale is bui.UIScale.MEDIUM else 570.0
         )
-        top_extra = 10 if uiscale is bui.UIScale.SMALL else 0
-
-        super().__init__(
-            root_widget=bui.containerwidget(
-                size=(0,0),
-                toolbar_visibility='no_menu_minimal',
-                scale=(
-                    2.04
-                    if uiscale is bui.UIScale.SMALL
-                    else 1.4 if uiscale is bui.UIScale.MEDIUM else 1.0
-                ),
-                stack_offset=(
-                    (0, 10) if uiscale is bui.UIScale.SMALL else (0, 0)
-                ),
-            ),
-            transition='in_scale',
-            origin_widget=origin_widget,
-        )
-
-        # bui.imagewidget(
-        #     parent=self._root_widget,
-        #     size=(self._width, self._height + top_extra),
-        #     position=(-self._width/2, -(self._height + top_extra)/2),
-        #     opacity=0.4,
-        #     texture=bui.gettexture('null'),
-        #     mask_texture=bui.gettexture('characterIconMask')
-        # )
 
         self._scroll_width = self._width - (100 + 2 * x_inset)
         self._scroll_height = self._height - (
@@ -81,33 +53,11 @@ class HomeScreen(bui.MainWindow):
 
         self._r = 'HomeScreen'
 
-        # if uiscale is bui.UIScale.SMALL:
-        #     bui.containerwidget(
-        #         edit=self._root_widget, on_cancel_call=self.main_window_back
-        #     )
-        #     self._back_button = None
-        # else:
-        #     self._back_button = bui.buttonwidget(
-        #         parent=self._root_widget,
-        #         position=(53 + x_inset, self._height - 60),
-        #         size=(140, 60),
-        #         scale=0.8,
-        #         autoselect=True,
-        #         label=bui.Lstr(resource='backText'),
-        #         button_type='back',
-        #         on_activate_call=self.main_window_back,
-        #     )
-        #     bui.containerwidget(
-        #         edit=self._root_widget, cancel_button=self._back_button
-        #     )
-
-        # if self._back_button is not None:
-        #     bui.buttonwidget(
-        #         edit=self._back_button,
-        #         button_type='backSmall',
-        #         size=(60, 60),
-        #         label=bui.charstr(bui.SpecialChar.BACK),
-        #     )
+        self._root_widget = self.containerwidget(
+            parent=root_widget,
+            size=(0, 0),
+            toolbar_visibility='no_menu_minimal',
+        )
 
         self._scrollwidget = bui.scrollwidget(
             parent=self._root_widget,
@@ -116,7 +66,6 @@ class HomeScreen(bui.MainWindow):
             highlight=False,
             size=(self._scroll_width, self._scroll_height),
             selection_loops_to_parent=True,
-            #border_opacity=0.3,
             color=(1,1,1),
         )
         bui.widget(edit=self._scrollwidget, right_widget=self._scrollwidget)
@@ -130,20 +79,6 @@ class HomeScreen(bui.MainWindow):
         self.apps: list[App] = []
         self._load_apps()
         self._build_ui()
-
-    @override
-    def get_main_window_state(self) -> bui.MainWindowState:
-        # Support recreating our window for back/refresh purposes.
-        cls = type(self)
-        return bui.BasicMainWindowState(
-            create_call=lambda transition, origin_widget: cls(
-                transition=transition, origin_widget=origin_widget
-            )
-        )
-
-    @override
-    def on_main_window_close(self) -> None:
-        pass
 
     def _load_apps(self) -> None:
 
@@ -167,12 +102,12 @@ class HomeScreen(bui.MainWindow):
                     )
 
     def _build_ui(self) -> None:
-    
+
         app = bui.app
         assert app.classic is not None
         uiscale = app.ui_v1.uiscale
 
-        _apps_per_row = 5 # number of apps in a single row.
+        _apps_per_row = 7 # number of apps in a single row.
         # transforming the list in tabular form(so we don't to care about row/comn and list index)
         _sliced_apps_list = [
             self.apps[i:i+_apps_per_row] for i in range(0, len(self.apps), _apps_per_row)
@@ -229,6 +164,5 @@ class HomeScreen(bui.MainWindow):
             y_pos -= _btn_size + _btn_ypad
 
     def _open_app(self, window: AppWindow, button: bui.buttonwidget) -> None:
-        self.main_window_close("instant")
         bui.app.mode.home_screen = None
-        window()
+        window(origin_widget=button)
