@@ -11,7 +11,7 @@ import bascenev1 as bs
 
 from bosos_files.app_window import AppWindow
 
-# export app Settings
+# export app Settings_Window_Testing
 class SettingsScreen(AppWindow):
 
     def __init__(
@@ -21,7 +21,7 @@ class SettingsScreen(AppWindow):
         transition: str | None = 'in_right',
         origin_widget: bui.Widget | None = None,
     ):
-        
+
         super().__init__(
             name="Settings",
             width=width,
