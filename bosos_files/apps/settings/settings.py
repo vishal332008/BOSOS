@@ -32,19 +32,5 @@ class SettingsScreen(AppWindow):
 
         self._rebuild()
 
-    @override
-    def get_main_window_state(self) -> bui.MainWindowState:
-        # Support recreating our window for back/refresh purposes.
-        cls = type(self)
-        return bui.BasicMainWindowState(
-            create_call=lambda transition, origin_widget: cls(
-                transition=transition, origin_widget=origin_widget
-            )
-        )
-
-    @override
-    def on_main_window_close(self) -> None:
-        pass
-
     def _rebuild(self) -> None:
         pass
