@@ -92,7 +92,7 @@ class Activate(babase.AppMode):
 
         self.time = bui.buttonwidget(
             parent=self.parent,
-            size=(100, 40),
+            size=(100, 37.5),
             label=time.strftime("%H:%M\n%d/%m - %A"),
             position=(size[0]/2 - 100, -size[1]/2),
             button_type='square',
@@ -115,7 +115,31 @@ class Activate(babase.AppMode):
 
         babase.apptimer(60 - time.second, set_timer)
 
-        self.home_screen = HomeScreen(root_widget=self.parent)
+        self.home_button = bui.buttonwidget(
+            parent=self.parent,
+            size=(40, 37.5),
+            label='',
+            position=(-size[0]/2, -size[1]/2),
+            button_type='square',
+            texture=bui.gettexture('flagColor'),
+            color=(0.4, 0.4, 0.4),
+            on_activate_call=self.home_pressed,
+        )
+
+        self.home_btn_img = bui.imagewidget(
+            parent=self.parent,
+            position=(-size[0]/2 + 5, -size[1]/2 + 5),
+            size=(30, 30),
+            texture=bui.gettexture('logo'),
+            draw_controller=self.home_button,
+        )
+
+    def home_pressed(self):
+        if self.home_screen is None:
+            self.home_screen = HomeScreen()
+        else:
+            bui.containerwidget(edit=self.home_screen._root_widget, transition='out_scale')
+            self.home_screen = None
 
     def update_desktop(self):
         try:
@@ -132,8 +156,15 @@ class Activate(babase.AppMode):
             )
             bui.buttonwidget(
                 edit=self.time,
-                size=(100, 40),
                 position=(size[0]/2 - 100, -size[1]/2),
+            )
+            bui.buttonwidget(
+                edit=self.home_button,
+                position=(-size[0]/2, -size[1]/2),
+            )
+            bui.imagewidget(
+                edit=self.home_btn_img,
+                position=(-size[0]/2 + 5, -size[1]/2 + 5),
             )
         except: pass
 
