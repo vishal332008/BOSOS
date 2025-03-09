@@ -29,7 +29,6 @@ class HomeScreen:
     def __init__(
         self,
         transition: str = 'in_scale',
-        root_widget = None,
     ):
         # pylint: disable=too-many-statements
         app = bui.app
@@ -54,10 +53,15 @@ class HomeScreen:
         self._r = 'HomeScreen'
 
         self._root_widget = bui.containerwidget(
-            parent=root_widget,
+            parent=bui.app.mode.parent,
             size=(0, 0),
             toolbar_visibility='no_menu_minimal',
             transition=transition,
+        )
+
+        bui.containerwidget(
+            edit=bui.app.mode.parent,
+            selected_child=self._root_widget
         )
 
         self._scrollwidget = bui.scrollwidget(
@@ -144,7 +148,8 @@ class HomeScreen:
                         functools.partial(
                             self._open_app,
                             window=babase.getclass(app_name, AppWindow),
-                            button=btn
+                            app_data=appy,
+                            button=btn,
                         )
                     )
                 )
@@ -164,7 +169,7 @@ class HomeScreen:
             x_pos = _btn_xpad # reset when enter new row.
             y_pos -= _btn_size + _btn_ypad
 
-    def _open_app(self, window: AppWindow, button: bui.buttonwidget) -> None:
+    def _open_app(self, window: AppWindow, app_data: App, button: bui.buttonwidget) -> None:
         bui.containerwidget(edit=self._root_widget, transition='out_scale')
         bui.app.mode.home_screen = None
-        window(origin_widget=button)
+        window(app_data, origin_widget=button)
