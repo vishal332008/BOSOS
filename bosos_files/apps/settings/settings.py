@@ -16,6 +16,7 @@ class SettingsScreen(AppWindow):
 
     def __init__(
         self,
+        app_data,
         width: float = 800.0,
         height: float = 600.0,
         transition: str | None = 'in_right',
@@ -23,7 +24,8 @@ class SettingsScreen(AppWindow):
     ):
 
         super().__init__(
-            name="Settings",
+            name=app_data.name,
+            filename=app_data.filename,
             width=width,
             height=height,
             transition=transition,

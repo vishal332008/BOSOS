@@ -17,6 +17,7 @@ import functools
 class FileViewerScreen(AppWindow):
     def __init__(
         self,
+        app_data,
         width: float = 800.0,
         height: float = 550.0,
         transition: str | None = 'in_right',
@@ -28,7 +29,8 @@ class FileViewerScreen(AppWindow):
         assert app.classic is not None
 
         super().__init__(
-            name="File Viewer",
+            name=app_data.name,
+            filename=app_data.filename,
             width=width,
             height=height,
             transition=transition,
