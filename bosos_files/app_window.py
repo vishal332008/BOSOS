@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import bauiv1 as bui
 
+import os
+
 class AppWindow:
     """ Common class for all apps """
 
@@ -9,7 +11,7 @@ class AppWindow:
         self,
         *,
         name: str,
-        icon: bui.Texture | None = None,
+        filename: str | None = None,
         width: float = 800.0,
         height: float = 600.0,
         transition: str | None,
@@ -20,29 +22,35 @@ class AppWindow:
         self._width = width
         self._height = height
 
-        self._root_widget=bui.containerwidget(
+        self.window_widget = bui.containerwidget(
             parent=bui.app.mode.parent,
             size=(0, 0),
             transition=transition,
         )
 
+        bui.containerwidget(
+            edit=bui.app.mode.parent,
+            selected_child=self.window_widget
+        )
+
         window = bui.imagewidget(
-            parent=self._root_widget,
+            parent=self.window_widget,
             size=(self._width, self._height),
             position=(-self._width/2, -self._height/2),
             texture=bui.gettexture('white'),
         )
 
         window_top = bui.imagewidget(
-            parent=self._root_widget,
-            size=(self._width, 40),
-            position=(-self._width/2, self._height/2 - 40),
+            parent=self.window_widget,
+            size=(self._width, 30),
+            position=(-self._width/2, self._height/2 - 30),
             texture=bui.gettexture('white'),
             color=(0.35, 0.35, 0.35),
         )
 
         self._name = name
-        self._icon = icon if icon else bui.gettexture("white")
+        texture_name = f'apps{os.sep}{filename}{os.sep}logo' if filename else "white"
+        self._icon = bui.gettexture(texture_name)
 
         # Windows that size tailor themselves to exact screen dimensions
         # can pass True for this. Generally this only applies to small
@@ -60,9 +68,9 @@ class AppWindow:
         self.window_origin_widget = origin_widget
 
         self.close_btn = bui.buttonwidget(
-            parent=self._root_widget,
-            position=(self._width/2 - 40, self._height/2 - 37.5),
-            size=(40, 35),
+            parent=self.window_widget,
+            position=(self._width/2 - 30, self._height/2 - 27.5),
+            size=(30, 25),
             label='X',
             textcolor=(0.4, 0.4, 0.4),
             button_type="square",
@@ -72,32 +80,40 @@ class AppWindow:
         )
 
         self.name_widget = bui.textwidget(
-            parent=self._root_widget,
-            position=(-self._width/2 + 40, self._height/2 - 10),
+            parent=self.window_widget,
+            position=(-self._width/2 + 30, self._height/2 - 5),
             size=(0, 0),
-            scale=0.8,
+            scale=0.7,
             color=(1, 1, 1),
             text=bui.Lstr(value=self._name),
         )
 
         self.icon_widget = bui.imagewidget(
-            parent=self._root_widget,
-            position=(-self._width/2 + 5, self._height/2 - 35),
-            size=(30, 30),
+            parent=self.window_widget,
+            position=(-self._width/2 + 5, self._height/2 - 25),
+            size=(20, 20),
             texture=self._icon,
         )
 
         bui.containerwidget(
-            edit=self._root_widget,
+            edit=self.window_widget,
             cancel_button=self.close_btn,
             selected_child=self.close_btn,
+        )
+        
+        self._root_widget = bui.scrollwidget(
+            parent=self.window_widget,
+            size=(self._width, self._height - 30),
+            position=(-self._width/2, -self._height/2),
+            background=False,
+            border_opacity=0.0,
         )
 
     def close(self) -> None:
 
         # no-op if our underlying widget is dead or on its way out.
-        if not self._root_widget or self._root_widget.transitioning_out:
+        if not self.window_widget or self.window_widget.transitioning_out:
             return
 
-        bui.containerwidget(edit=self._root_widget, transition='out_scale')
-        self.home_screen = bui.app.mode.home_screen_type(transition='in_scale')
+        bui.containerwidget(edit=self.window_widget, transition='out_scale')
+        bui.app.mode.home_screen = bui.app.mode.home_screen_type(transition='in_scale')
