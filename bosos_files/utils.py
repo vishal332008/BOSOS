@@ -5,8 +5,8 @@ import os
 import re
 import shutil
 
-PYTHON_PATH = babase.app.env.python_directory_user
-APPS_PATH = PYTHON_PATH + os.sep + 'bosos_files' + os.sep + 'apps'
+CURRENT_DIR = os.path.dirname(__file__)
+APPS_PATH = CURRENT_DIR + os.sep + 'apps'
 
 def setup_textures():
     buiapp = bui.app
