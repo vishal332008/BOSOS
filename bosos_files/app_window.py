@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import bauiv1 as bui
 
+import bosos_files as bos
+
 import os
 
 class AppWindow:
@@ -116,4 +118,4 @@ class AppWindow:
             return
 
         bui.containerwidget(edit=self.window_widget, transition='out_scale')
-        bui.app.mode.home_screen = bui.app.mode.home_screen_type(transition='in_scale')
+        bui.app.mode.home_screen = bos.HomeScreen(transition='in_scale')
