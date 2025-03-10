@@ -7,28 +7,30 @@ from typing import override
 import babase
 import bauiv1 as bui
 import bascenev1 as bs
-
 from bauiv1lib.qrcode import QRCodeWindow
 from bosos_files.app_window import AppWindow
 
 import os
 import functools
 
-# export app FileViewer
+# export app File_Viewer
 class FileViewerScreen(AppWindow):
-
     def __init__(
         self,
+        app_data,
         width: float = 800.0,
         height: float = 550.0,
         transition: str | None = 'in_right',
         origin_widget: bui.Widget | None = None,
     ):
         # pylint: disable=too-many-statements
+
         app = bui.app
         assert app.classic is not None
 
         super().__init__(
+            name=app_data.name,
+            filename=app_data.filename,
             width=width,
             height=height,
             transition=transition,
@@ -39,20 +41,6 @@ class FileViewerScreen(AppWindow):
         self._texture_button: bui.Widget | None = None
 
         self._build_ui()
-
-    @override
-    def get_main_window_state(self) -> bui.MainWindowState:
-        # Support recreating our window for back/refresh purposes.
-        cls = type(self)
-        return bui.BasicMainWindowState(
-            create_call=lambda transition, origin_widget: cls(
-                transition=transition, origin_widget=origin_widget
-            )
-        )
-
-    @override
-    def on_main_window_close(self) -> None:
-        pass
 
     def _build_ui(self) -> None:
         self._audio_button = bui.buttonwidget(
@@ -72,5 +60,4 @@ class FileViewerScreen(AppWindow):
         )
 
     def _open_textures_window(self):
-        if not self.main_window_has_control():
-            return
+        print("open texture button pressed")
