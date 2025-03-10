@@ -8,12 +8,7 @@ import functools
 
 import babase
 import bauiv1 as bui
-
-from bosos_files.utils import get_app_and_class_name
-from bosos_files.app_window import AppWindow
-
-PYTHON_PATH = babase.app.env.python_directory_user
-APPS_PATH = PYTHON_PATH + os.sep + 'bosos_files' + os.sep + 'apps'
+import bosos_files as bos
 
 @dataclass
 class App:
@@ -87,10 +82,10 @@ class HomeScreen:
 
     def _load_apps(self) -> None:
 
-        folderlist = os.listdir(APPS_PATH)
+        folderlist = os.listdir(bos.APPS_PATH)
         for app in folderlist:
-            names = get_app_and_class_name(
-                path=(APPS_PATH + os.sep + app), filename=app
+            names = bos.get_app_and_class_name(
+                path=(bos.APPS_PATH + os.sep + app), filename=app
             )
             if names is not None:
                 appname = names[0].strip()
@@ -102,7 +97,7 @@ class HomeScreen:
                             texture="texture",
                             filename=app,
                             classname=classname,
-                            path=(APPS_PATH + os.sep + app)
+                            path=(bos.APPS_PATH + os.sep + app)
                         )
                     )
 
@@ -147,7 +142,7 @@ class HomeScreen:
                     on_activate_call=(
                         functools.partial(
                             self._open_app,
-                            window=babase.getclass(app_name, AppWindow),
+                            window=babase.getclass(app_name, bos.AppWindow),
                             app_data=appy,
                             button=btn,
                         )
@@ -169,7 +164,7 @@ class HomeScreen:
             x_pos = _btn_xpad # reset when enter new row.
             y_pos -= _btn_size + _btn_ypad
 
-    def _open_app(self, window: AppWindow, app_data: App, button: bui.buttonwidget) -> None:
+    def _open_app(self, window: bos.AppWindow, app_data: App, button: bui.Widget) -> None:
         bui.containerwidget(edit=self._root_widget, transition='out_scale')
         bui.app.mode.home_screen = None
         window(app_data, origin_widget=button)

@@ -8,8 +8,7 @@ import _babase
 import _baclassic
 import bauiv1 as bui
 
-from bosos_files.home import HomeScreen
-from bosos_files.utils import setup_textures
+import bosos_files as bos
 
 from bacommon.app import AppExperience
 from babase._appintent import AppIntentExec, AppIntentDefault
@@ -25,10 +24,9 @@ if TYPE_CHECKING:
 class Activate(babase.AppMode):
 
     def __init__(self) -> None:
-
-        self.home_screen_type = HomeScreen
-        self.home_screen: HomeScreen | None = None
-        self.parent: bui.containerwidget | None = None
+        
+        self.home_screen: bos.HomeScreen | None = None
+        self.parent: bui.Widget | None = None
 
     @override
     @classmethod
@@ -65,7 +63,7 @@ class Activate(babase.AppMode):
         babase.app._subsystem_registration_ended = True
 
         _baclassic.classic_app_mode_activate()
-        setup_textures()
+        bos.setup_textures()
 
         self.parent = bui.containerwidget(
             size=(0, 0),
@@ -136,7 +134,7 @@ class Activate(babase.AppMode):
 
     def home_pressed(self):
         if self.home_screen is None:
-            self.home_screen = HomeScreen()
+            self.home_screen = bos.HomeScreen()
         else:
             bui.containerwidget(edit=self.home_screen._root_widget, transition='out_scale')
             self.home_screen = None
