@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 class Activate(babase.AppMode):
 
     def __init__(self) -> None:
-        
+
         self.home_screen: bos.HomeScreen | None = None
         self.parent: bui.Widget | None = None
 
