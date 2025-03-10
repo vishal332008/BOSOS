@@ -84,7 +84,7 @@ class HomeScreen:
 
         folderlist = os.listdir(bos.APPS_PATH)
         for app in folderlist:
-            names = get_app_and_class_name(
+            names = bos.get_app_and_class_name(
                 path=(bos.APPS_PATH + os.sep + app), filename=app
             )
             if names is not None:
