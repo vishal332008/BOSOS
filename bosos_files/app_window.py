@@ -23,11 +23,14 @@ class AppWindow:
         self._app_data = app_data
         self._width = width
         self._height = height
+        size = bui.get_virtual_screen_size()
 
         self.window_widget = bui.containerwidget(
             parent=bui.app.mode.parent,
-            size=(0, 0),
+            size=(self._width, self._height),
+            position=((size[0] - self._width)/2, (size[1] - self._height)/2),
             transition=transition,
+            background=False,
         )
 
         bui.containerwidget(
@@ -38,14 +41,14 @@ class AppWindow:
         window = bui.imagewidget(
             parent=self.window_widget,
             size=(self._width, self._height),
-            position=(-self._width/2, -self._height/2),
+            position=(0, 0),
             texture=bui.gettexture('white'),
         )
 
         window_top = bui.imagewidget(
             parent=self.window_widget,
             size=(self._width, 30),
-            position=(-self._width/2, self._height/2 - 30),
+            position=(0, self._height - 30),
             texture=bui.gettexture('white'),
             color=(0.35, 0.35, 0.35),
         )
@@ -74,7 +77,7 @@ class AppWindow:
 
         self.close_btn = bui.buttonwidget(
             parent=self.window_widget,
-            position=(self._width/2 - 30, self._height/2 - 27.5),
+            position=(self._width - 30, self._height - 27.5),
             size=(30, 25),
             label='X',
             textcolor=(0.4, 0.4, 0.4),
@@ -86,7 +89,7 @@ class AppWindow:
 
         self.name_widget = bui.textwidget(
             parent=self.window_widget,
-            position=(-self._width/2 + 30, self._height/2 - 5),
+            position=(30, self._height - 5),
             size=(0, 0),
             scale=0.7,
             color=(1, 1, 1),
@@ -95,7 +98,7 @@ class AppWindow:
 
         self.icon_widget = bui.imagewidget(
             parent=self.window_widget,
-            position=(-self._width/2 + 5, self._height/2 - 25),
+            position=(5, self._height - 25),
             size=(20, 20),
             texture=self._icon,
         )
@@ -109,7 +112,6 @@ class AppWindow:
         self._root_widget = bui.scrollwidget(
             parent=self.window_widget,
             size=(self._width, self._height - 30),
-            position=(-self._width/2, -self._height/2),
             background=False,
             border_opacity=0.0,
         )
