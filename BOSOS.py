@@ -66,18 +66,20 @@ class Activate(babase.AppMode):
 
         _baclassic.classic_app_mode_activate()
         bos.setup_textures()
-
-        self.parent = bui.containerwidget(
-            size=(0, 0),
-            toolbar_visibility='no_menu_minimal'
-        )
+        
         size = bui.get_virtual_screen_size()
         time = datetime.datetime.now()
+
+        self.parent = bui.containerwidget(
+            parent=bui.get_special_widget("overlay_stack"),
+            size=size,
+            toolbar_visibility='no_menu_minimal'
+        )
 
         self.wallpaper = bui.imagewidget(
             parent=self.parent,
             size=(size[0], size[1] - 40),
-            position=(-size[0]/2, -size[1]/2 + 40),
+            position=(0, 40),
             texture=bui.gettexture('alwaysLandBGColor') 
         )
         # 'flagColor', 'eggTex3', 'alwaysLandBGColor', 'menuBG'
@@ -85,7 +87,6 @@ class Activate(babase.AppMode):
         self.taskbar = bui.imagewidget(
             parent=self.parent,
             size=(size[0], 40),
-            position=(-size[0]/2, -size[1]/2),
             texture=bui.gettexture('flagColor'),
             color=(0.4, 0.4, 0.4),
         )
@@ -94,7 +95,7 @@ class Activate(babase.AppMode):
             parent=self.parent,
             size=(100, 37.5),
             label=time.strftime("%H:%M\n%d/%m - %A"),
-            position=(size[0]/2 - 100, -size[1]/2),
+            position=(size[0] - 100, 0),
             button_type='square',
             text_scale=2,
             textcolor=(2.5, 2.5, 2.5),
@@ -119,7 +120,7 @@ class Activate(babase.AppMode):
             parent=self.parent,
             size=(40, 37.5),
             label='',
-            position=(-size[0]/2, -size[1]/2),
+            position=(0, 0),
             button_type='square',
             texture=bui.gettexture('flagColor'),
             color=(0.4, 0.4, 0.4),
@@ -128,7 +129,7 @@ class Activate(babase.AppMode):
 
         self.home_btn_img = bui.imagewidget(
             parent=self.parent,
-            position=(-size[0]/2 + 5, -size[1]/2 + 5),
+            position=(5, 5),
             size=(30, 30),
             texture=bui.gettexture('logo'),
             draw_controller=self.home_button,
@@ -137,7 +138,7 @@ class Activate(babase.AppMode):
         self.desktop = bui.containerwidget(
             parent=self.parent,
             size=(0, 0), # (size[0], size[1] - 40),
-            position=(-size[0]/2, -size[1]/2 + 40),
+            position=(0, 40),
             
         )
 
@@ -154,7 +155,7 @@ class Activate(babase.AppMode):
             app_data.name: bui.buttonwidget(
                 parent=self.parent,
                 size=(30, 30),
-                position=(-size[0]/2 + 100 + (len(self.open_apps) * 50), -size[1]/2 + 5),
+                position=(100 + (len(self.open_apps) * 50), 5),
                 texture=tex,
                 label='',
                 color=(1, 1, 1),
@@ -167,7 +168,7 @@ class Activate(babase.AppMode):
         for num, button in enumerate(self.open_apps.values()):
             bui.buttonwidget(
                 edit=button,
-                position=(-size[0]/2 + 100 + ((num) * 50), -size[1]/2 + 5),
+                position=(100 + ((num) * 50), 5),
             )
 
     def close_app(self, app_data):
@@ -178,27 +179,22 @@ class Activate(babase.AppMode):
     def update_desktop(self):
         try:
             size=bui.get_virtual_screen_size()
+            bui.containerwidget(
+                edit=self.parent,
+                size=size,
+            )
             bui.imagewidget(
                 edit=self.wallpaper,
                 size=(size[0], size[1] - 40),
-                position=(-size[0]/2, -size[1]/2 + 40),
+                position=(0, 40),
             )
             bui.imagewidget(
                 edit=self.taskbar,
                 size=(size[0], 40),
-                position=(-size[0]/2, -size[1]/2),
             )
             bui.buttonwidget(
                 edit=self.time,
-                position=(size[0]/2 - 100, -size[1]/2),
-            )
-            bui.buttonwidget(
-                edit=self.home_button,
-                position=(-size[0]/2, -size[1]/2),
-            )
-            bui.imagewidget(
-                edit=self.home_btn_img,
-                position=(-size[0]/2 + 5, -size[1]/2 + 5),
+                position=(size[0] - 100, 0),
             )
         except: pass
 
