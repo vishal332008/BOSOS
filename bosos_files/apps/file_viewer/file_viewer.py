@@ -29,8 +29,7 @@ class FileViewerScreen(AppWindow):
         assert app.classic is not None
 
         super().__init__(
-            name=app_data.name,
-            filename=app_data.filename,
+            app_data=app_data,
             width=width,
             height=height,
             transition=transition,
