@@ -24,9 +24,11 @@ if TYPE_CHECKING:
 class Activate(babase.AppMode):
 
     def __init__(self) -> None:
-
+        
         self.home_screen: bos.HomeScreen | None = None
         self.parent: bui.Widget | None = None
+        self.desktop: bui.Widget | None = None
+        self.open_apps = {}
 
     @override
     @classmethod
@@ -69,7 +71,7 @@ class Activate(babase.AppMode):
             size=(0, 0),
             toolbar_visibility='no_menu_minimal'
         )
-        size=bui.get_virtual_screen_size()
+        size = bui.get_virtual_screen_size()
         time = datetime.datetime.now()
 
         self.wallpaper = bui.imagewidget(
@@ -131,6 +133,13 @@ class Activate(babase.AppMode):
             texture=bui.gettexture('logo'),
             draw_controller=self.home_button,
         )
+        
+        self.desktop = bui.containerwidget(
+            parent=self.parent,
+            size=(0, 0), # (size[0], size[1] - 40),
+            position=(-size[0]/2, -size[1]/2 + 40),
+            
+        )
 
     def home_pressed(self):
         if self.home_screen is None:
@@ -138,6 +147,33 @@ class Activate(babase.AppMode):
         else:
             bui.containerwidget(edit=self.home_screen._root_widget, transition='out_scale')
             self.home_screen = None
+
+    def add_app(self, app_data, tex: bui.Texture):
+        size = bui.get_virtual_screen_size()
+        self.open_apps.update({
+            app_data.name: bui.buttonwidget(
+                parent=self.parent,
+                size=(30, 30),
+                position=(-size[0]/2 + 100 + (len(self.open_apps) * 50), -size[1]/2 + 5),
+                texture=tex,
+                label='',
+                color=(1, 1, 1),
+                on_activate_call=lambda: print("apps")
+            )
+        })
+
+    def refresh_open_apps(self):
+        size = bui.get_virtual_screen_size()
+        for num, button in enumerate(self.open_apps.values()):
+            bui.buttonwidget(
+                edit=button,
+                position=(-size[0]/2 + 100 + ((num) * 50), -size[1]/2 + 5),
+            )
+
+    def close_app(self, app_data):
+        self.open_apps[app_data.name].delete()
+        del self.open_apps[app_data.name]
+        self.refresh_open_apps()
 
     def update_desktop(self):
         try:

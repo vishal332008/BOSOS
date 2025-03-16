@@ -12,8 +12,7 @@ class AppWindow:
     def __init__(
         self,
         *,
-        name: str,
-        filename: str | None = None,
+        app_data,
         width: float = 800.0,
         height: float = 600.0,
         transition: str | None,
@@ -21,6 +20,7 @@ class AppWindow:
         refresh_on_screen_size_changes: bool = False,
      ) -> None:
 
+        self._app_data = app_data
         self._width = width
         self._height = height
 
@@ -50,8 +50,11 @@ class AppWindow:
             color=(0.35, 0.35, 0.35),
         )
 
-        self._name = name
-        texture_name = f'apps{os.sep}{filename}{os.sep}logo' if filename else "white"
+        self._name = self._app_data.name
+        texture_name = (
+            f'apps{os.sep}{self._app_data.filename}{os.sep}logo'
+            if self._app_data.filename else "white"
+        )
         self._icon = bui.gettexture(texture_name)
 
         # Windows that size tailor themselves to exact screen dimensions
@@ -110,6 +113,8 @@ class AppWindow:
             background=False,
             border_opacity=0.0,
         )
+        
+        bui.app.mode.add_app(app_data, self._icon)
 
     def close(self) -> None:
 
@@ -117,5 +122,7 @@ class AppWindow:
         if not self.window_widget or self.window_widget.transitioning_out:
             return
 
+        bui.app.mode.close_app(self._app_data)
+
         bui.containerwidget(edit=self.window_widget, transition='out_scale')
-        bui.app.mode.home_screen = bos.HomeScreen(transition='in_scale')
+        # bui.app.mode.home_screen = bos.HomeScreen(transition='in_scale')
