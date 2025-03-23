@@ -25,7 +25,7 @@ def setup_textures() -> None:
 
     buiapp = bui.app
     assert buiapp.classic is not None
-    
+
     apps = os.listdir(APPS_PATH)
     texture_path = f"{os.getcwd()}{os.sep}ba_data{os.sep}textures2{os.sep}"
     for app in apps:
@@ -38,7 +38,7 @@ def setup_textures() -> None:
         if textures == []:
             print(f"Warning: No Textures found for {app} (app logo might be missing)")
             continue
-        
+
         for tex in textures:
             try:
                 if not os.path.exists(texture_path + tex):
@@ -68,12 +68,13 @@ def get_app_and_class_name(path, filename) -> list[str] | None:
                             f"\'# export app {app_and_class[0]}\' in {filename}.py"
                     )
                     return None
-                
+
             if pattern2.match(line):
                 class_line = True
                 app_and_class[0] = pattern2.match(line).group(1).replace('_', ' ')
 
         return None
+
 
 def load_apps() -> list[App]:
     
@@ -96,5 +97,5 @@ def load_apps() -> list[App]:
                         path=(APPS_PATH + os.sep + app)
                     )
                 )
-    
+
     return apps

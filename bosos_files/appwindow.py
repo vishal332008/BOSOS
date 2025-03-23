@@ -13,7 +13,7 @@ class AppWindow:
         app_data,
         origin_widget: bui.Widget | None,
      ) -> None:
-        
+
         self._app_data = app_data
 
         scrn_width = bui.app.mode.main_screen.width
@@ -80,5 +80,5 @@ class AppWindow:
 
         bui.containerwidget(edit=self._root_widget, transition="out_scale")
         bui.app.mode.main_screen.taskbar._app_drawer = bos.AppDrawer(
-          bui.app.mode.main_screen.taskbar._menu_btn  
+            bui.app.mode.main_screen.taskbar._menu_btn  
         )

@@ -13,7 +13,7 @@ class MainScreen(bui.Window):
     """ The first screen when app mode activates. """
 
     def __init__(self) -> None:
-       
+
         scrn_size = bui.get_virtual_screen_size()
         self.width = scrn_size[0]
         self.height = scrn_size[1]
@@ -22,7 +22,7 @@ class MainScreen(bui.Window):
         super().__init__(
             root_widget=bui.containerwidget(
                 parent=bui.get_special_widget("overlay_stack"),
-                size=(self.width, self.height),
+                size=(self.width, self.height - 50),
                 background=False
             )
         )
@@ -36,15 +36,14 @@ class MainScreen(bui.Window):
         self.taskbar = TaskBar(self)
 
     def __del__(self) -> None:
-        
         self.taskbar._init_timer = None
         self._root_widget.delete()
 
 
 class TaskBar:
-    
+
     def __init__(self, mainscreen: MainScreen):
-        
+
         self.width = mainscreen.width
         self.height = 50.0
         self._root_widget = bui.containerwidget(
@@ -62,7 +61,7 @@ class TaskBar:
         self._init_timer: bui.AppTimer | None = None
 
         self.build_ui()
-    
+
     def build_ui(self) -> None:
 
         self._bg_tex = bui.imagewidget(
@@ -73,12 +72,16 @@ class TaskBar:
         )
 
         time = datetime.now()
-        self._time_widget = bui.textwidget(
+        self._time_widget = bui.buttonwidget(
             parent=self._root_widget,
-            position=(self.width - 150, 0),
-            size=(150, self.height),
-            max_height=self.height-5,
-            text=time.strftime("%H:%M\n%d/%m - %A"),
+            position=(self.width - 130, 0),
+            size=(130, self.height - 5),
+            label=time.strftime("%H:%M\n%d/%m - %A"),
+            text_scale=0.8,
+            textcolor=(2.5, 2.5, 2.5),
+            button_type='square',
+            texture=bui.gettexture('flagColor'),
+            color=(0.4, 0.4, 0.4),
         )
 
         self._init_timer = bui.AppTimer(60 - time.second, self._set_time_timer)
@@ -96,28 +99,26 @@ class TaskBar:
     def _update_time(self) -> None:
 
         time = datetime.now()
-        bui.textwidget(
+        bui.buttonwidget(
             edit=self._time_widget,
-            text=time.strftime("%H:%M\n%d/%m - %A")
+            label=time.strftime("%H:%M\n%d/%m - %A")
         )
 
     def _set_time_timer(self) -> None:
 
-        bui.textwidget(
+        bui.buttonwidget(
             edit=self._time_widget,
-            text=datetime.now().strftime("%H:%M\n%d/%m - %A")
+            label=datetime.now().strftime("%H:%M\n%d/%m - %A")
         )
         self._time_update_timer = bui.AppTimer(
             60, self._update_time, repeat=True
         )
-    
-    def _open_menu(self) -> None:
 
+    def _open_menu(self) -> None:
         if self._app_drawer is None:
             self._app_drawer = AppDrawer(self._menu_btn)
         else:
             self._app_drawer.close()
-        
+
     def __del__(self) -> None:
-       
        self._time_update_timer = None

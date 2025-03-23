@@ -10,7 +10,7 @@ import bosos_files as bos
 class AppDrawer:
 
     def __init__(self, origin_widget: bui.Widget):
-        
+
         scrn_width = bui.app.mode.main_screen.width
         scrn_height = bui.app.mode.main_screen.height
 
@@ -58,9 +58,9 @@ class AppDrawer:
         )
 
         self._build_ui()
-    
+
     def _build_ui(self) -> None:
-        
+
         apps = bos.load_apps()
         _apps_per_row = 7 # number of apps in a single row.
         # transforming the list into tabular form(so we don't to care about row/comn and list index)
@@ -122,7 +122,7 @@ class AppDrawer:
     def _open_app(self, window: bos.AppWindow, app_data, button: bui.Widget) -> None:
         self.close()
         window(app_data=app_data, origin_widget=button)
-    
+
     def close(self) -> None:
 
         bui.containerwidget(edit=self._root_widget, transition="out_scale")
@@ -132,7 +132,5 @@ class AppDrawer:
 
         for child in self._root_widget.get_children():
             child.delete()
-        
+
         self._root_widget.delete()
-    
-   

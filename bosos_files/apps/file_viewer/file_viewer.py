@@ -48,5 +48,4 @@ class FileViewerScreen(bos.AppWindow):
         )
 
     def _open_textures_window(self):
-        
         print("open texture button pressed")

@@ -62,7 +62,7 @@ class Activate(babase.AppMode):
 
         _baclassic.classic_app_mode_activate()
         # bos.setup_textures()
-        
+
         self.main_screen = bos.MainScreen()
 
     @override
@@ -72,6 +72,5 @@ class Activate(babase.AppMode):
 
     @override
     def on_deactivate(self) -> None:
-
         self.main_screen = None
         print("hmm bye")
