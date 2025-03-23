@@ -1,33 +1,20 @@
-# pylint: disable=all
 
 from __future__ import annotations
 
-from typing import override
-
-import math
-import babase
 import bauiv1 as bui
-import bascenev1 as bs
-
-from bosos_files.app_window import AppWindow
+import bosos_files as bos
 
 # export app Settings
-class SettingsScreen(AppWindow):
+class SettingsScreen(bos.AppWindow):
 
     def __init__(
         self,
         app_data,
-        width: float = 800.0,
-        height: float = 600.0,
-        transition: str | None = 'in_right',
         origin_widget: bui.Widget | None = None,
     ):
 
         super().__init__(
             app_data=app_data,
-            width=width,
-            height=height,
-            transition=transition,
             origin_widget=origin_widget,
         )
 
