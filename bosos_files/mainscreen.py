@@ -22,14 +22,15 @@ class MainScreen(bui.Window):
         super().__init__(
             root_widget=bui.containerwidget(
                 parent=bui.get_special_widget("overlay_stack"),
-                size=(self.width, self.height - 50),
+                size=(self.width, self.height),
                 background=False
             )
         )
 
         self.wallpaper = bui.imagewidget(
             parent=self._root_widget,
-            size=(self.width, self.height),
+            size=(self.width, self.height - 50.0),
+            position=(0, 50),
             texture=bui.gettexture("alwaysLandBGColor"),
         )
 
@@ -66,22 +67,24 @@ class TaskBar:
 
         self._bg_tex = bui.imagewidget(
             parent=self._root_widget,
-            size=(self.width, self.height-2),
+            size=(self.width, self.height - 1),
             color=(0.4, 0.4, 0.4),
             texture=bui.gettexture("flagColor"),
         )
 
         time = datetime.now()
-        self._time_widget = bui.buttonwidget(
+        self._time_widget = bui.textwidget(
             parent=self._root_widget,
             position=(self.width - 130, 0),
             size=(130, self.height - 5),
-            label=time.strftime("%H:%M\n%d/%m - %A"),
-            text_scale=0.8,
-            textcolor=(2.5, 2.5, 2.5),
-            button_type='square',
-            texture=bui.gettexture('flagColor'),
-            color=(0.4, 0.4, 0.4),
+            text=time.strftime("%H:%M\n%d/%m - %A"),
+            scale=0.6,
+            h_align='center',
+            color=(2.5, 2.5, 2.5),
+            # button_type='square',
+            # texture=bui.gettexture('flagColor'),
+            # color=(0.4, 0.4, 0.4),
+            selectable=True
         )
 
         self._init_timer = bui.AppTimer(60 - time.second, self._set_time_timer)
@@ -99,22 +102,23 @@ class TaskBar:
     def _update_time(self) -> None:
 
         time = datetime.now()
-        bui.buttonwidget(
+        bui.textwidget(
             edit=self._time_widget,
-            label=time.strftime("%H:%M\n%d/%m - %A")
+            text=time.strftime("%H:%M\n%d/%m - %A")
         )
 
     def _set_time_timer(self) -> None:
 
-        bui.buttonwidget(
+        bui.textwidget(
             edit=self._time_widget,
-            label=datetime.now().strftime("%H:%M\n%d/%m - %A")
+            text=datetime.now().strftime("%H:%M\n%d/%m - %A")
         )
         self._time_update_timer = bui.AppTimer(
             60, self._update_time, repeat=True
         )
 
     def _open_menu(self) -> None:
+
         if self._app_drawer is None:
             self._app_drawer = AppDrawer(self._menu_btn)
         else:

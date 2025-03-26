@@ -6,10 +6,13 @@ import os
 import re
 import shutil
 
+import babase
 import bauiv1 as bui
 
 CURRENT_DIR = os.path.dirname(__file__)
-APPS_PATH = CURRENT_DIR + os.sep + 'apps'
+APPS_PATH = (
+    babase.app.env.python_directory_user + os.sep + 'bosos_files' + os.sep + 'apps'
+)
 
 @dataclass
 class App:
@@ -27,7 +30,7 @@ def setup_textures() -> None:
     assert buiapp.classic is not None
 
     apps = os.listdir(APPS_PATH)
-    texture_path = f"{os.getcwd()}{os.sep}ba_data{os.sep}textures2{os.sep}"
+    texture_path = f"{os.getcwd()}{os.sep}ba_data{os.sep}textures{os.sep}apps{os.sep}"
     for app in apps:
         files = os.listdir(APPS_PATH + os.sep + app)
         if bui.app.classic.platform == 'android':
@@ -40,14 +43,23 @@ def setup_textures() -> None:
             continue
 
         for tex in textures:
-            try:
-                if not os.path.exists(texture_path + tex):
-                    shutil.copy(
-                        APPS_PATH + os.sep + app + os.sep + tex,
-                        texture_path + os.sep + tex
-                    )
-            except Exception as e:
-                print(e)
+            # try:
+            #     if not os.path.exists(texture_path + os.sep + app):
+            #         os.mkdir(texture_path + os.sep + app)
+
+            #         shutil.copy(
+            #             APPS_PATH + os.sep + app + os.sep + tex,
+            #             texture_path + os.sep + app + os.sep + tex
+            #         )
+
+            # except Exception as e:
+            #     print(e)
+            if not os.path.exists(texture_path + app):
+                os.makedirs(texture_path + app, exist_ok=True)
+            shutil.copy(
+                APPS_PATH + os.sep + app + os.sep + tex,
+                texture_path + app + os.sep + tex
+            )
 
 
 def get_app_and_class_name(path, filename) -> list[str] | None:

@@ -32,6 +32,13 @@ class Activate(babase.AppMode):
 
     @override
     @classmethod
+    def can_handle_intent_impl(cls, intent: babase.AppIntent) -> bool:
+        return isinstance(
+            intent, babase.AppIntentExec | babase.AppIntentDefault
+        )
+
+    @override
+    @classmethod
     def _supports_intent(cls, intent: AppIntent) -> bool:
         # We support default and exec intents currently.
         return isinstance(intent, AppIntentExec | AppIntentDefault)
@@ -61,7 +68,7 @@ class Activate(babase.AppMode):
         babase.app._subsystem_registration_ended = True
 
         _baclassic.classic_app_mode_activate()
-        # bos.setup_textures()
+        bos.setup_textures()
 
         self.main_screen = bos.MainScreen()
 

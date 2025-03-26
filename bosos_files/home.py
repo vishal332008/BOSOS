@@ -10,14 +10,14 @@ import babase
 import bauiv1 as bui
 import bosos_files as bos
 
-@dataclass
-class App:
+# @dataclass
+# class App:
 
-    name: str
-    texture: str
-    filename: str
-    classname: str
-    path: str
+#     name: str
+#     texture: str
+#     filename: str
+#     classname: str
+#     path: str
 
 class HomeScreen:
 
@@ -76,7 +76,7 @@ class HomeScreen:
             selection_loops_to_parent=True,
         )
 
-        self.apps: list[App] = []
+        self.apps: list[bos.App] = []
         self._load_apps()
         self._build_ui()
 
@@ -92,7 +92,7 @@ class HomeScreen:
                 classname = names[1].strip()
                 if classname and appname:
                     self.apps.append(
-                        App(
+                        bos.App(
                             name=appname,
                             texture="texture",
                             filename=app,
@@ -164,7 +164,7 @@ class HomeScreen:
             x_pos = _btn_xpad # reset when enter new row.
             y_pos -= _btn_size + _btn_ypad
 
-    def _open_app(self, window: bos.AppWindow, app_data: App, button: bui.Widget) -> None:
+    def _open_app(self, window: bos.AppWindow, app_data: bos.App, button: bui.Widget) -> None:
         bui.containerwidget(edit=self._root_widget, transition='out_scale')
         bui.app.mode.home_screen = None
         window(app_data, origin_widget=button)
