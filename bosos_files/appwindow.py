@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import os
-
 import bauiv1 as bui
 import bosos_files as bos
 
@@ -26,11 +24,6 @@ class AppWindow:
 
         xpos = (scrn_width-self.width)/2
         ypos = (scrn_height-self.height)/2
-
-        texture_name = (
-            f'apps{os.sep}{self._app_data.filename}{os.sep}logo'
-            if self._app_data.filename else "white"
-        )
 
         self._root_widget = bui.containerwidget(
             parent=bui.app.mode.main_screen._root_widget,
@@ -59,7 +52,7 @@ class AppWindow:
             parent=self._root_widget,
             position=(5, self.height+5),
             size=(30, 30),
-            texture=bui.gettexture(texture_name),
+            texture=bui.gettexture(app_data.texture),
         )
 
         self._name = bui.textwidget(
