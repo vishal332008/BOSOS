@@ -5,14 +5,10 @@ from typing import TYPE_CHECKING, override
 
 import babase
 import _babase
-import _baclassic
-
-import bauiv1 as bui
 import bosos_files as bos
 
 from bacommon.app import AppExperience
 from babase._appintent import AppIntentExec, AppIntentDefault
-
 
 if TYPE_CHECKING:
     from babase import AppIntent
@@ -32,20 +28,13 @@ class Activate(babase.AppMode):
 
     @override
     @classmethod
-    def can_handle_intent_impl(cls, intent: babase.AppIntent) -> bool:
-        return isinstance(
-            intent, babase.AppIntentExec | babase.AppIntentDefault
-        )
-
-    @override
-    @classmethod
-    def _supports_intent(cls, intent: AppIntent) -> bool:
+    def supports_intent(cls, intent: AppIntent) -> bool:
         # We support default and exec intents currently.
         return isinstance(intent, AppIntentExec | AppIntentDefault)
 
     @override
     @classmethod
-    def _can_handle_intent(cls, intent: babase.AppIntent) -> bool:
+    def can_handle_intent(cls, intent: babase.AppIntent) -> bool:
         # We support default and exec intents currently.
         return isinstance(
             intent, babase.AppIntentExec | babase.AppIntentDefault
@@ -66,8 +55,8 @@ class Activate(babase.AppMode):
         bosos_appmode = babase.AppSubsystem()
         bosos_appmode.on_screen_size_change = self.update_screen
         babase.app._subsystem_registration_ended = True
-
-        _baclassic.classic_app_mode_activate()
+    
+        # _baclassic.classic_app_mode_activate()
         bos.setup_textures()
 
         self.main_screen = bos.MainScreen()
