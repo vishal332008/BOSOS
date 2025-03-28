@@ -90,7 +90,7 @@ class AppDrawer:
                     color=(1.0, 1.0, 1.0),
                     button_type='square',
                     label='',
-                    texture=bui.gettexture(f'apps{os.sep}{appy.filename}{os.sep}logo'),
+                    texture=bui.gettexture(appy.texture),
                 )
                 bui.buttonwidget(
                     edit=btn,
